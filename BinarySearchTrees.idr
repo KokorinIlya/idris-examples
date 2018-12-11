@@ -55,6 +55,7 @@ delete_from_tree (Node left elem right) to_delete =
     LT =>
      let new_left = delete_from_tree left to_delete in
      Node new_left elem right
+     
     EQ => case right of
       Empty => left
       Node right_left right_elem right_right =>
