@@ -9,7 +9,7 @@ data BinarySearchTree : Type -> Type where
     -> (right : BinarySearchTree t) -> BinarySearchTree t
 
 export
-insert : BinarySearchTree t -> t -> BinarySearchTree t
+total insert : BinarySearchTree t -> t -> BinarySearchTree t
 insert Empty to_insert = Node Empty to_insert Empty
 insert t@(Node left node_element right) to_insert =
   case (compare to_insert node_element) of
@@ -18,13 +18,14 @@ insert t@(Node left node_element right) to_insert =
     GT => Node left node_element (insert right to_insert)
 
 export
-list_to_tree : Ord t => List t -> BinarySearchTree t
+total list_to_tree : Ord t => List t -> BinarySearchTree t
 list_to_tree [] = Empty
 list_to_tree (x :: xs) =
   let tree = list_to_tree xs in
   insert tree x
 
-export tree_to_list : BinarySearchTree t -> List t
+export
+total tree_to_list : BinarySearchTree t -> List t
 tree_to_list Empty = []
 tree_to_list (Node left elem right) =
   let left_list = tree_to_list left in
@@ -32,7 +33,7 @@ tree_to_list (Node left elem right) =
   concat_lists left_list (elem :: right_list)
 
 export
-find_in_tree : BinarySearchTree t -> t -> Bool
+total find_in_tree : BinarySearchTree t -> t -> Bool
 find_in_tree Empty to_find = False
 find_in_tree (Node left elem right) to_find =
   case (compare to_find elem) of
@@ -45,17 +46,15 @@ find_min : BinarySearchTree t -> t -> BinarySearchTree t -> t
 find_min Empty elem right = elem
 find_min (Node left_left x left_right) elem right = find_min left_left x left_right
 
-
-
 export
-delete_from_tree : BinarySearchTree t -> t -> BinarySearchTree t
+total delete_from_tree : BinarySearchTree t -> t -> BinarySearchTree t
 delete_from_tree Empty to_delete = Empty
 delete_from_tree (Node left elem right) to_delete =
   case (compare to_delete elem) of
     LT =>
      let new_left = delete_from_tree left to_delete in
      Node new_left elem right
-     
+
     EQ => case right of
       Empty => left
       Node right_left right_elem right_right =>
