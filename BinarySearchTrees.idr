@@ -30,3 +30,11 @@ tree_to_list (Node left elem right) =
   let left_list = tree_to_list left in
   let right_list = tree_to_list right in
   concat_lists left_list (elem :: right_list)
+
+export find_in_tree : BinarySearchTree t -> t -> Bool
+find_in_tree Empty to_find = False
+find_in_tree (Node left elem right) to_find =
+  case (compare to_find elem) of
+    LT => find_in_tree left to_find
+    EQ => True
+    GT => find_in_tree right to_find
