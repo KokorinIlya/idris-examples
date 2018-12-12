@@ -31,6 +31,11 @@ len_implicit {n = Z} [] = 0
 len_implicit {n = (S k)} (x :: xs) = 1 + len_implicit xs
 
 export
-len : Vect n a -> Nat
+total len : Vect n a -> Nat
 len [] = 0
 len (x :: xs) = 1 + len xs
+
+export
+total my_take : (n : Nat)-> Vect (n + m) t -> Vect n t
+my_take Z vect = []
+my_take (S k) (x :: xs) = x :: (take k xs)

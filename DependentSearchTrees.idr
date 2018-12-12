@@ -64,14 +64,44 @@ tree_is_empty_after_delete (Node left elem right) to_delete =
         EQ => True
         GT => False
 
--- find_min : Node t -> t
-total find_min : {left_empty : Bool} ->
+-- find_max : Node t -> t
+total find_max : {right_empty : Bool} ->
  DependentSearchTree left_empty t -> t -> DependentSearchTree right_empty t -> t
-find_min {left_empty = True} Empty elem right = elem
-find_min {left_empty = False} (Node left_left x left_right) elem right =
-   find_min left_left x left_right
-
+find_max {right_empty = True} left elem Empty = elem
+find_max {right_empty = False} left elem (Node right_left right_elem right_right) =
+   find_max right_left right_elem right_right
 
 export
 delete : (tree : DependentSearchTree is_empty t) -> (to_delete : t) ->
  DependentSearchTree (tree_is_empty_after_delete tree to_delete) t
+delete Empty to_delete = Empty
+delete orig_tree@(Node left elem right) to_delete =
+  case left of
+    Node left_left left_elem left_right =>
+    -- Получившееся в результате дерево будетт непустым
+    case (compare to_delete elem) of
+      LT =>
+        let new_left = delete left to_delete in
+        Node new_left elem right
+      EQ =>
+        let left_max = find_max left_left left_elem left_right in
+        let new_left = delete left left_max in
+        Node new_left left_max right
+
+      GT =>
+        let new_right = delete right to_delete in
+        Node left elem new_right
+
+    Empty =>
+     case right of
+       Node right_left right_elem right_right =>
+       -- Получившееся дерево будет непустым
+       case (compare to_delete elem) of
+         -- Левое поддерево пустое => можно не удалять
+         LT => orig_tree
+         -- Удаляем текущую вершину, возвращаем её правое поддерево
+         EQ => right
+         GT =>
+           let new_right = delete right to_delete in
+           Node Empty elem new_right
+       Empty => ?x
