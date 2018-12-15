@@ -59,11 +59,9 @@ tree_is_empty_after_delete (Node left elem right) to_delete with (compare to_del
     tree_is_empty_after_delete (Node Empty elem Empty) to_delete | EQ = True
     tree_is_empty_after_delete (Node left elem right) to_delete  | EQ = False
 
--- find_max : Node t -> t
-total find_max : {right_empty : Bool} -> DependentSearchTree left_empty t -> t -> DependentSearchTree right_empty t -> t
-find_max {right_empty = True} left elem Empty = elem
-find_max {right_empty = False} left elem (Node right_left right_elem right_right) =
-   find_max right_left right_elem right_right
+total find_max : DependentSearchTree False t -> t
+find_max (Node left elem Empty) = elem
+find_max (Node left elem right@(Node _ _ _)) = find_max right
 
 export
 delete : (tree : DependentSearchTree is_empty t) -> (to_delete : t) ->
@@ -94,12 +92,12 @@ delete (Node left elem right) to_delete with (compare to_delete elem)
       Empty
     ) to_delete | EQ =
       left
-      
+
     delete (Node
         left@(Node left_left left_elem left_right)
         elem
         right@(Node right_left right_elem right_right)
     ) to_delee | EQ =
-      let max_left = find_max left_left left_elem left_right in
+      let max_left = find_max left in
       let new_left = delete left max_left in
       Node new_left max_left right
