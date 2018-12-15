@@ -42,6 +42,7 @@ list_to_tree (x :: xs) =
   let t = list_to_tree xs in
   insert t x
 
+export
 total tree_to_list : {is_empty : Bool} -> DependentSearchTree is_empty t -> List t
 tree_to_list {is_empty = True} Empty = []
 tree_to_list {is_empty = False} (Node left elem right) =
