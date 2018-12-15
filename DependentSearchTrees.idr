@@ -42,6 +42,7 @@ list_to_tree (x :: xs) =
   let t = list_to_tree xs in
   insert t x
 
+export
 total tree_to_list : {is_empty : Bool} -> DependentSearchTree is_empty t -> List t
 tree_to_list {is_empty = True} Empty = []
 tree_to_list {is_empty = False} (Node left elem right) =
@@ -78,30 +79,26 @@ delete Empty to_delete = Empty
 delete orig_tree@(Node left elem right) to_delete =
   case left of
     Node left_left left_elem left_right =>
-    -- Получившееся в результате дерево будетт непустым
-    case (compare to_delete elem) of
-      LT =>
-        let new_left = delete left to_delete in
-        Node new_left elem right
-      EQ =>
-        let left_max = find_max left_left left_elem left_right in
-        let new_left = delete left left_max in
-        Node new_left left_max right
+      case (compare to_delete elem) of
+        LT =>
+          let new_left = delete left to_delete in
+          Node new_left elem right
+        EQ =>
+          let left_max = find_max left_left left_elem left_right in
+          let new_left = delete left left_max in
+          Node new_left left_max right
 
-      GT =>
-        let new_right = delete right to_delete in
-        Node left elem new_right
+        GT =>
+          let new_right = delete right to_delete in
+          Node left elem new_right
 
     Empty =>
      case right of
        Node right_left right_elem right_right =>
-       -- Получившееся дерево будет непустым
-       case (compare to_delete elem) of
-         -- Левое поддерево пустое => можно не удалять
-         LT => orig_tree
-         -- Удаляем текущую вершину, возвращаем её правое поддерево
-         EQ => right
-         GT =>
-           let new_right = delete right to_delete in
-           Node Empty elem new_right
+        case (compare to_delete elem) of
+          LT => orig_tree
+          EQ => right
+          GT =>
+            let new_right = delete right to_delete in
+            Node Empty elem new_right
        Empty => ?x
