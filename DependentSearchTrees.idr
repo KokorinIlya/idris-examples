@@ -59,7 +59,6 @@ tree_is_empty_after_delete (Node left elem right) to_delete with (compare to_del
     tree_is_empty_after_delete (Node Empty elem Empty) to_delete | EQ = True
     tree_is_empty_after_delete (Node _ elem _ ) to_delete        | EQ = False
 
-
 -- find_max : Node t -> t
 total find_max : {right_empty : Bool} -> DependentSearchTree left_empty t -> t -> DependentSearchTree right_empty t -> t
 find_max {right_empty = True} left elem Empty = elem
