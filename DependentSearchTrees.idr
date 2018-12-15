@@ -73,16 +73,33 @@ delete (Node left elem right) to_delete with (compare to_delete elem)
     delete (Node left elem right) to_delete  | LT =
       let new_left = delete left to_delete in
       Node new_left elem right
+
     delete (Node left elem right) to_delete  | GT =
       let new_right = delete right to_delete in
       Node left elem new_right
+
     delete (Node Empty elem Empty) to_delete | EQ =
       Empty
-    delete (Node Empty elem right@(Node right_left right_elem right_right)) to_delete | EQ =
+
+    delete (Node
+      Empty
+      elem
+      right@(Node right_left right_elem right_right)
+    ) to_delete | EQ =
       right
-    delete (Node left@(Node left_left left_elem left_right) elem Empty) to_delete | EQ =
+
+    delete (Node
+      left@(Node left_left left_elem left_right)
+      elem
+      Empty
+    ) to_delete | EQ =
       left
-    delete (Node left@(Node left_left left_elem left_right) elem right@(Node right_left right_elem right_right)) to_delee | EQ =
+      
+    delete (Node
+        left@(Node left_left left_elem left_right)
+        elem
+        right@(Node right_left right_elem right_right)
+    ) to_delee | EQ =
       let max_left = find_max left_left left_elem left_right in
       let new_left = delete left max_left in
       Node new_left max_left right
