@@ -48,3 +48,27 @@ guess target = do
       GT => do
         putStrLn "Your number is larger"
         guess target
+
+guess_with_counting : (target : Nat) -> Nat -> IO ()
+guess_with_counting target count = do
+  putStrLn "Enter your guess"
+  user_number <- read_number
+  case user_number of
+    Nothing => do
+      putStrLn "Incorrect number, try one more time"
+      guess_with_counting target (S count)
+    Just num => case (compare num target) of
+      LT => do
+        putStrLn "Your number is less"
+        guess_with_counting target (S count)
+      EQ => do
+        putStr "Correct guess, "
+        putStr (show count)
+        putStrLn " incorrect numbers entered"
+
+      GT => do
+        putStrLn "Your number is larger"
+        guess_with_counting target (S count)
+
+play_guess_with_counting : (target : Nat) -> IO ()
+play_guess_with_counting target = guess_with_counting target Z
