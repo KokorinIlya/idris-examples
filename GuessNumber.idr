@@ -1,5 +1,6 @@
 module GuessNumber
 
+-- TDD, page 138
 total string_to_num : List Char -> Maybe (Nat, Nat)
 string_to_num Nil = Just (0, 0)
 string_to_num (cur_char :: Nil) =
