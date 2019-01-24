@@ -2,6 +2,32 @@ module DependentTypeIO
 
 import Data.Vect
 
+data VectOfUnkownLength : Type  where
+  MkVectOfUnkownLength : (k : Nat) -> Vect k String -> VectOfUnkownLength
+
+read_vect_desugarized : IO VectOfUnkownLength
+read_vect_desugarized = do
+  cur_line <- getLine
+  if (cur_line == "") then
+      pure (MkVectOfUnkownLength 0 [])
+    else do
+      (MkVectOfUnkownLength len vect) <- read_vect_desugarized
+      pure (MkVectOfUnkownLength (S len) (cur_line :: vect))
+
+read_and_zip_vectors_desugarized : IO()
+read_and_zip_vectors_desugarized = do
+  putStrLn "Print first vector"
+  (MkVectOfUnkownLength first_len first_vect) <- read_vect_desugarized
+  putStrLn "Print second vector"
+  (MkVectOfUnkownLength second_len second_vect) <- read_vect_desugarized
+  case exactLength first_len second_vect of
+    Nothing => putStrLn "Cannot zip two vectors with different lengths"
+
+    Just new_second_vect => do
+      putStrLn "Zipped vector is"
+      let zipped = zip first_vect new_second_vect
+      printLn zipped
+
 read_vect_of_unknown_length : IO (n : Nat ** Vect n String)
 read_vect_of_unknown_length = do
   cur_line <- getLine
