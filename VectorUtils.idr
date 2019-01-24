@@ -22,7 +22,8 @@ is_empty : Vect n a -> Bool
 is_empty [] = True
 is_empty (x :: xs) = False
 
-export len_from_type : {n : Nat} -> Vect n a -> Nat
+export
+len_from_type : {n : Nat} -> Vect n a -> Nat
 len_from_type {n} vect = n
 
 export
@@ -39,3 +40,7 @@ export
 total my_take : (n : Nat)-> Vect (n + m) t -> Vect n t
 my_take Z vect = []
 my_take (S k) (x :: xs) = x :: (take k xs)
+
+total get_by_index : Vect k a -> Fin k -> a
+get_by_index (x :: xs) FZ = x
+get_by_index (y :: xs) (FS k) = get_by_index xs k
