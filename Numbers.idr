@@ -9,3 +9,8 @@ inc n = \f => \z => f (n f z)
 
 add : (n : ((a -> a) -> (a -> a))) -> (m : ((a -> a) -> (a -> a))) -> ((a -> a) -> (a -> a))
 add n m = \f => \z => n f (m f z)
+
+mul : (n : ((a -> a) -> (a -> a))) -> (m : ((a -> a) -> (a -> a))) -> ((a -> a) -> (a -> a))
+mul n m = \f => \z =>
+  let g = add m in
+  ?x
